@@ -28,7 +28,10 @@ mongoose.connect(process.env.MONGODB_URL /* || "mongodb://localhost/AppointmentO
 
 app.use(bodyParser.json())
 
-app.use('/',require('../api/api'))
+app.use('/',require('../api/apiCreateIssue'))
+app.use('/',require('../api/apiIssue'))
+app.use('/',require('../api/apiStatus'))
+app.use('/',require('../api/apiUser'))
 
 app.listen(process.env.PORT || 4000, function () {
     console.log(`Server started at http://localhost:${process.env.PORT}`);

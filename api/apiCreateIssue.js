@@ -1,115 +1,17 @@
 
 const mongoose = require('mongoose');
 const express = require('express');
-const  {issueDB}= require('../schema/schema')
-const  {debugmodel} = require('../schema/schema')
-const  {defectmodel} = require('../schema/schema')
-const {userInfo}  = require('../schema/schema')
+const  issueDB = require('../schema/createIssueSchema')
+const  debugmodel = require('../schema/statusSchema')
+const  defectmodel = require('../schema/issueSchema')
+const userInfo  = require('../schema/userSchema')
 
 const router = express.Router();
 mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', true)
 
-router.post('/user', (req, res) => {
-    const newUser = new userInfo(req.body);
-    newUser.save()
-        .then(db => res.send({ db }))
-        .catch(err => {
-            if (err.name === 'MongoError' && err.code === 11000) {
-                res.status(400).send({ error: 'empid must be unique' });
-            } else if (err.name === 'ValidationError') {
-                const errors = {};
-                for (const field in err.errors) {
-                    errors[field] = err.errors[field].message;
-                }
-                res.status(400).send({ errors });
-            } else {
-                console.log(err);
-                res.status(500).send({ error: ' error' });
-            }
-        });
-});
-// Get all users
-router.get('/user', (req, res) => {
-    userInfo.find({})
-        .then(users => res.send({ users }))
-        .catch(err => {
-            console.log(err);
-            res.status(500).send({ error: 'Server error' });
-        });
-});
-
-// Get user by empid
-router.get('/user/:empid', (req, res) => {
-    const { empid } = req.params;
-    userInfo.findOne({ empid })
-        .then(user => {
-            if (!user) {
-                res.status(404).send({ error: `User with empid ${empid} not found` });
-            } else {
-                res.send({ user });
-            }
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).send({ error: 'Server error' });
-        });
-});
-
-// Update user by empid
-router.put('/user/:empid', (req, res) => {
-    const { empid } = req.params;
-   const userdata= userInfo.findOneAndUpdate({ empid }, req.body, { new: true })
-        .then(async user => {
-            if (!user) {
-                res.status(404).send({ error: `User with empid ${empid} not found` });
-            } else {
-                userdata.userName=req.body.userName
-                userdata.gender=req.body.gender
-                userdata.mobileNumber=req.body.mobileNumber
-                userdata.email=req.body.email
-                userdata.role=req.body.role
-                await user.save();
-                res.send({ message: `user info '${empid}' updated` });
-                res.send({ user });
-            }
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).send({ error: 'Server error' });
-        });
-});
-
-// Delete all users
-router.delete('/user', (req, res) => {
-    userInfo.deleteMany({})
-        .then(() => res.send({ message: 'All users deleted' }))
-        .catch(err => {
-            console.log(err);
-            res.status(500).send({ error: 'Server error' });
-        });
-});
-
-// Delete user by empid
-router.delete('/user/:empid', (req, res) => {
-    const { empid } = req.params;
-    userInfo.findOneAndDelete({ empid })
-        .then(user => {
-            if (!user) {
-                res.status(404).send({ error: `User with empid ${empid} not found` });
-            } else {
-                res.send({ message: `User with empid ${empid} deleted` });
-            }
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).send({ error: 'Server error' });
-        });
-});
 
 //create issue
-
-
 
 router.post('/createissue', async (req, res) => {
     const { sid } = req.body; // getting unique data from postman
