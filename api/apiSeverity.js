@@ -14,7 +14,7 @@ router.post('/postseverity', async (req, res) => {
     const val = await data.save()
         .then(response => {
             console.log(response)
-            res.json(val)
+            res.json(response)
         })
         .catch(err => {
             console.log("Error in saving data", err)

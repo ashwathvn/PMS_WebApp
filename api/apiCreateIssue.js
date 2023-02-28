@@ -7,7 +7,7 @@ const defectmodel = require('../schema/issueSchema')
 const userInfo = require('../schema/userSchema')
 const severitymodel = require('../schema/severitySchema')
 
-const autoIncrement = require('mongoose-auto-increment');
+// const autoIncrement = require('mongoose-auto-increment');
 
 
 const router = express.Router();
@@ -42,20 +42,22 @@ router.post('/createissue', async (req, res) => {
   }
   const { role } = userinfo;
 
-  const severity = await severitymodel.findOne({ severityid });
-  if (!severity) {
-    return res.status(404).send({ error: 'User not found in  severityid' });
+  const severitydata = await severitymodel.findOne({ severityid });
+  console.log("Severity", severitydata)
+  if (!severitydata) {
+    console.log("Severity not found")
+    return res.status(404).send({ error: 'User not found in  empid' });
   }
-  const { severitytype } = severity;
+  const { severity } = severitydata;
 
   const userDataaaa = new issueDB({
-    createissueid: '',
+    // createissueid: '',
     Title: req.body.Title,
     description: req.body.description,
     assigne: role,
     issue: issue,
     status: status,
-    severity: severitytype,
+    severity: severity,
     priority: req.body.priority,
     label: req.body.label
   });
@@ -69,12 +71,12 @@ router.post('/createissue', async (req, res) => {
   })
 });
 
-issueDB.plugin(autoIncrement.plugin, {
-  model: 'createiissue',
-  field: 'createissueid',
-  startAt: 1,
-  incrementBy: 1
-});
+// issueDB.plugin(autoIncrement.plugin, {
+//   model: 'createiissue',
+//   field: 'createissueid',
+//   startAt: 1,
+//   incrementBy: 1
+// });
 
 // GET request
 router.get('/issues', async (req, res) => {
