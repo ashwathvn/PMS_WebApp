@@ -1,20 +1,29 @@
 
 const mongoose = require('mongoose');
 const express = require('express');
-const  defectmodel = require('../schema/issueSchema')
+const defectmodel = require('../schema/issueSchema')
 
 const router = express.Router();
+
 //Create new issue type
 router.post('/postissue', async (req, res) => {
+    let incrIssueId;
+    let lastIssueType = await defectmodel.findOne().sort({ _id: -1 });
+    if (!lastIssueType) {
+        incrIssueId = 1;
+    } else {
+        incrIssueId = lastIssueType.issueid + 1;
+    }
+
     const data = new defectmodel({
-        issueid: req.body.issueid,
+        issueid: incrIssueId,
         issue: req.body.issue,
     });
 
-    const val = await data.save()
+    await data.save()
         .then(response => {
             console.log(response)
-            res.json(val)
+            res.json(response)
         })
         .catch(err => {
             console.log("Error in saving data", err)
@@ -73,4 +82,4 @@ router.delete('/deleteissue/:id', async (req, res) => {
     })
 })
 
-module.exports=router
+module.exports = router

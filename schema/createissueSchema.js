@@ -4,10 +4,11 @@ mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', true)
 
 const createIssue = new mongoose.Schema({
-    // createissueid: {
-    //     type: Number,
-    //     required: true
-    // },
+    createissueid: {
+        type: Number,
+        required: true,
+        unique: true
+    },
     Title: {
         type: String,
         required: true

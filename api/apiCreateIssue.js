@@ -43,15 +43,28 @@ router.post('/createissue', async (req, res) => {
   const { role } = userinfo;
 
   const severitydata = await severitymodel.findOne({ severityid });
-  console.log("Severity", severitydata)
   if (!severitydata) {
-    console.log("Severity not found")
     return res.status(404).send({ error: 'User not found in  empid' });
   }
   const { severity } = severitydata;
 
+  let incrCreateIssueId;
+  let lastIssue = await issueDB.findOne().sort({ _id: -1 });
+  if (!lastIssue) {
+    console.log("Not found")
+    incrCreateIssueId = 1;
+  } else {
+    console.log("Found")
+    if (lastIssue.createissueid) {
+      incrCreateIssueId = lastIssue.createissueid + 1;
+    } else {
+      console.log("No createissueid for last issue")
+      incrCreateIssueId = 1;
+    }
+  }
+
   const userDataaaa = new issueDB({
-    // createissueid: '',
+    createissueid: incrCreateIssueId,
     Title: req.body.Title,
     description: req.body.description,
     assigne: role,
@@ -70,13 +83,6 @@ router.post('/createissue', async (req, res) => {
     }
   })
 });
-
-// issueDB.plugin(autoIncrement.plugin, {
-//   model: 'createiissue',
-//   field: 'createissueid',
-//   startAt: 1,
-//   incrementBy: 1
-// });
 
 // GET request
 router.get('/issues', async (req, res) => {
@@ -168,8 +174,8 @@ router.put('/issues/:title', async (req, res) => {
       issueToUpdate.issue = issue;
       issueToUpdate.status = status;
       issueToUpdate.severity = severitytype;
-      // issueToUpdate.priority = req.body.priority;
-      // issueToUpdate.label = req.body.label;
+      issueToUpdate.priority = req.body.priority;
+      issueToUpdate.label = req.body.label;
 
       await issueToUpdate.save();
       res.send({ message: `Issue '${title}' updated` });

@@ -6,12 +6,20 @@ const router = express.Router();
 
 //Create new severity type
 router.post('/postseverity', async (req, res) => {
+    let incrSeverityId;
+    let lastSeverity = await severitymodel.findOne().sort({ _id: -1 });
+    if (!lastSeverity) {
+        incrSeverityId = 1;
+    } else {
+        incrSeverityId = lastSeverity.severityid + 1;
+    }
+
     const data = new severitymodel({
-        severityid: req.body.severityid,
+        severityid: incrSeverityId,
         severity: req.body.severity,
     });
 
-    const val = await data.save()
+    await data.save()
         .then(response => {
             console.log(response)
             res.json(response)

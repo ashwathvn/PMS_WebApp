@@ -1,20 +1,28 @@
 
 const mongoose = require('mongoose');
 const express = require('express');
-const  debugmodel = require('../schema/statusSchema')
+const debugmodel = require('../schema/statusSchema')
 
 const router = express.Router();
 //Create a new bug status
 router.post('/status', async (req, res) => {
+    let incrStatusId;
+    let lastStatusType = await debugmodel.findOne().sort({ _id: -1 });
+    if (!lastStatusType) {
+        incrStatusId = 1;
+    } else {
+        incrStatusId = lastStatusType.sid + 1;
+    }
+
     const data = new debugmodel({
-        sid: req.body.sid,
+        sid: incrStatusId,
         status: req.body.status
     });
 
-    const val = await data.save()
+    await data.save()
         .then(response => {
             console.log(response)
-            res.json(val)
+            res.json(response)
         })
         .catch(err => {
             console.log("Error in saving data", err)
@@ -88,4 +96,4 @@ router.delete('/deletestatus/:id', async (req, res) => {
         }
     })
 })
-module.exports=router
+module.exports = router

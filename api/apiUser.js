@@ -1,7 +1,7 @@
 
 const mongoose = require('mongoose');
 const express = require('express');
-const userInfo  = require('../schema/userSchema')
+const userInfo = require('../schema/userSchema')
 
 
 const router = express.Router();
@@ -9,8 +9,23 @@ const router = express.Router();
 
 
 //Create new user
-router.post('/user', (req, res) => {
-    const newUser = new userInfo(req.body);
+router.post('/user', async (req, res) => {
+    let incrUserId;
+    let lastUser = await userInfo.findOne().sort({ _id: -1 });
+    if (!lastUser) {
+        incrUserId = 1;
+    } else {
+        incrUserId = lastUser.empid + 1;
+    }
+
+    const newUser = new userInfo({
+        empid: incrUserId,
+        userName: req.body.userName,
+        gender: req.body.gender,
+        mobileNumber: req.body.mobileNumber,
+        email: req.body.email,
+        role: req.body.role
+    });
     newUser.save()
         .then(db =>
             res.send(db)
@@ -112,4 +127,4 @@ router.delete('/user/:empid', (req, res) => {
         });
 });
 
-module.exports=router
+module.exports = router
