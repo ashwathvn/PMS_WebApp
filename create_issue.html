@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bug Tracking Tool</title>
+    <link rel="stylesheet" href="style1.css">
+  </head>
+  <body>
+    <header>
+      <h1>Bug Tracking Tool</h1>
+    </header>
+    <main>
+      <section class="bug-list">
+        <h2>Bugs</h2>
+        <ul id="bugs-list">
+        </ul>
+      </section>
+      <section class="bug-form">
+        <h2>Add New Bug</h2>
+        <form id="bug-form">
+		<label for="bug-name">Title:</label>
+  <input type="text" id="bug-name" name="bug-name">
+  <label for="bug-description">Description:</label>
+  <textarea id="bug-description" name="bug-description"></textarea>
+  <div class="dropdown">
+    <label for="issue-type">Issue type:</label>
+    <select id="issue-type" name="issue-type">
+      <option value="EPIC">EPIC</option>
+      <option value="Story">Story</option>
+      <option value="Task">Task</option>
+      <option value="Improvement">Improvement</option>
+    </select>
+  </div>
+  <div class="dropdown">
+    <label for="status-type">Status type:</label>
+    <select id="status-type" name="status-type">
+      <option value="Open">Open</option>
+      <option value="In progress">In progress</option>
+      <option value="To be tested">To be tested</option>
+      <option value="Closed">Closed</option>
+      <option value="Reopen">Reopen</option>
+    </select>
+  </div>
+  <br><br>
+   <div class="dropdown">
+  <label for="priority">Priority:</label>
+  <select id="priority" name="priority">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+  </select>
+  </div>
+   <div class="dropdown">
+  <label for="severity">Severity:</label>
+  <select id="severity" name="severity">
+    <option value="show stopper">Show Stopper</option>
+    <option value="critical">Critical</option>
+    <option value="major">Major</option>
+    <option value="minor">Minor</option>
+  </select>
+  </div>
+  <br><br>
+  <label for="bug-file">Upload File:</label>
+  <input type="file" id="bug-file" name="bug-file">
+  <button type="submit" id="submit-btn">Submit</button>
+</form>
+
+      </section>
+    </main>
+    <footer>
+      
+    </footer>
+    <script src="script_new.js"></script>
+  </body>
+</html>
