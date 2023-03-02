@@ -14,6 +14,8 @@ const connectionParams = {
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
+app.use(express.static(path.join(__dirname, '../public')));
+
 // Use process.env to access environment variables defined in .env file
 
 

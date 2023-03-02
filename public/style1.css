@@ -1,0 +1,113 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #333;
+  color: #fff;
+  padding: 5px;
+}
+
+main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.bug-list {
+  width: 60%;
+}
+
+.bug-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bug-list li {
+  background-color: #f2f2f2;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.bug-form {
+  width: 35%;
+}
+
+.bug-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.bug-form input[type="text"],
+.bug-form textarea {
+  display: block;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+button[type="submit"] {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+select {
+  width: 150px;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  background-color: #f1f1f1;
+  color: #333;
+  cursor: pointer;
+}
+
+select:focus {
+  outline: none;
+}
+
+.dropdown:before {
+  content: "\25BC";
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #999;
+}
+
+.dropdown:after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #ccc;
+}
+
+select:hover ~ .dropdown:before,
+select:focus ~ .dropdown:before {
+  color: #555;
+}
+
+select:hover ~ .dropdown:after,
+select:focus ~ .dropdown:after {
+  background-color: #555;
+}
