@@ -22,22 +22,11 @@
           <textarea id="bug-description" name="bug-description"></textarea>
           <div class="dropdown">
             <label for="issue-type">Issue type:</label>
-            <select id="issue-type" name="issue-type">
-              <option value="1">EPIC</option>
-              <option value="2">Story</option>
-              <option value="3">Task</option>
-              <option value="4">Improvement</option>
-            </select>
+            <select id="issue-type" name="issue-type"></select>
           </div>
           <div class="dropdown">
             <label for="status-type">Status type:</label>
-            <select id="status-type" name="status-type">
-              <option value="1">Open</option>
-              <option value="2">In progress</option>
-              <option value="3">To be tested</option>
-              <option value="4">Closed</option>
-              <option value="5">Reopen</option>
-            </select>
+            <select id="status-type" name="status-type"></select>
           </div>
           <br /><br />
           <div class="dropdown">
@@ -51,12 +40,7 @@
           </div>
           <div class="dropdown">
             <label for="severity">Severity:</label>
-            <select id="severity" name="severity">
-              <option value="1">Show Stopper</option>
-              <option value="2">Critical</option>
-              <option value="3">Major</option>
-              <option value="4">Minor</option>
-            </select>
+            <select id="severity" name="severity"></select>
           </div>
           <br /><br />
           <!-- <label for="bug-file">Upload File:</label>
@@ -70,66 +54,82 @@
     </div>
     <footer></footer>
     <script>
-      // const issueTypeDropdown = document.getElementById('issue-type');
-      // const statusTypeDropdown = document.getElementById('status-type');
-      // const priorityDropdown = document.getElementById('priority');
-      // const severityDropdown = document.getElementById('severity');
+      const issueTypeDropdown = document.getElementById("issue-type");
+      const statusTypeDropdown = document.getElementById("status-type");
+      const priorityDropdown = document.getElementById("priority");
+      const severityDropdown = document.getElementById("severity");
 
-      // fetch('/allissues')
-      //   .then(response => response.json())
-      //   .then(data => {
-      //     // Populate issue type dropdown
-      //     issueTypeDropdown.innerHTML = '';
-      //     data.issueTypes.forEach(issueType => {
-      //       const option = document.createElement('option');
-      //       option.value = issueType.issue;
-      //       option.text = issueType.issue;
-      //       issueTypeDropdown.add(option);
-      //     });
-      //   })
-      //   .catch(error => console.error(error));
+      fetch("/allissues")
+        .then((response) => response.json())
+        .then((data) => {
+          // Populate issue type dropdown
+          issueTypeDropdown.innerHTML = "";
+          const uniqueOptions = new Set();
+          data.forEach((issueType) => {
+            if (!uniqueOptions.has(issueType.issue)) {
+              const option = document.createElement("option");
+              option.value = issueType.issueid;
+              option.text = issueType.issue;
+              issueTypeDropdown.add(option);
+              uniqueOptions.add(issueType.issue);
+            }
+          });
+        })
+        .catch((error) => console.error(error));
 
-      //     // Populate status type dropdown
-      //     fetch('/getallstatus')
-      //   .then(response => response.json())
-      //   .then(data => {
-      //     statusTypeDropdown.innerHTML = '';
-      //     data.statusTypes.forEach(statusType => {
-      //       const option = document.createElement('option');
-      //       option.value = statusType.status;
-      //       option.text = statusType.status;
-      //       statusTypeDropdown.add(option);
-      //     });
-      //   })
-      //   .catch(error => console.error(error));
+      // Populate status type dropdown
+      fetch("/getallstatus")
+        .then((response) => response.json())
+        .then((data) => {
+          statusTypeDropdown.innerHTML = "";
+          const uniqueOptions = new Set();
+          data.forEach((statusType) => {
+            if (!uniqueOptions.has(statusType.status)) {
+              const option = document.createElement("option");
+              option.value = statusType.sid;
+              option.text = statusType.status;
+              statusTypeDropdown.add(option);
+              uniqueOptions.add(statusType.status);
+            }
+          });
+        })
+        .catch((error) => console.error(error));
 
-      //   // Populate priority dropdown
-      //     fetch('/issues')
+      // Populate priority dropdown
+      // fetch('/issues')
       //   .then(response => response.json())
       //   .then(data => {
       //     priorityDropdown.innerHTML = '';
-      //       data.priorities.forEach(issues => {
-      //       const option = document.createElement('option');
-      //       option.value = issues.priority;
-      //       option.text = issues.priority;
-      //       priorityDropdown.add(option);
+      //     const uniqueOptions = new Set();
+      //     data.forEach(issues => {
+      //       if (!uniqueOptions.has(issues.priority)) {
+      //         const option = document.createElement('option');
+      //         option.value = issues.priority;
+      //         option.text = issues.priority;
+      //         priorityDropdown.add(option);
+      //         uniqueOptions.add(issues.priority);
+      //       }
       //     });
       //   })
       //   .catch(error => console.error(error));
 
-      //     // Populate severity dropdown
-      //     fetch('/allseverities')
-      //   .then(response => response.json())
-      //   .then(data => {
-      //     severityDropdown.innerHTML = '';
-      //     data.severities.forEach(severity => {
-      //       const option = document.createElement('option');
-      //       option.value = severity.severity;
-      //       option.text = severity.severity;
-      //       severityDropdown.add(option);
-      //     });
-      //   })
-      //   .catch(error => console.error(error));
+      // Populate severity dropdown
+      fetch("/allseverities")
+        .then((response) => response.json())
+        .then((data) => {
+          severityDropdown.innerHTML = "";
+          const uniqueOptions = new Set();
+          data.forEach((severity) => {
+            if (!uniqueOptions.has(severity.severity)) {
+              const option = document.createElement("option");
+              option.value = severity.severityid;
+              option.text = severity.severity;
+              severityDropdown.add(option);
+              uniqueOptions.add(severity.severity);
+            }
+          });
+        })
+        .catch((error) => console.error(error));
 
       function submitIssue() {
         var title = document.getElementById("bug-name").value;
