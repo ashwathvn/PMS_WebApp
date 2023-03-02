@@ -12,7 +12,7 @@ const severitySchema = new mongoose.Schema({
     severity: {
         type: String,
         required: true,
-        enum: ["HIGH", "MEDIUM", "LOW", "STOPPER"]
+        enum: ["Show Stopper", "Critical", "Major", "Minor"]
     },
 
 })

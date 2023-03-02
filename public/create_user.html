@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bug Tracking Tool</title>
+    <link rel="stylesheet" href="UI.css" />
+  </head>
+  <body>
+    <h2>CREATE NEW USER</h2>
+    <form id="create-user-form" action="" method="post">
+      <!-- <label for="id">ID:</label>
+      <input type="number" id="id" name="id" /><br /> -->
+
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" /><br />
+
+      <label for="gender">Gender:</label>
+      <label>
+        <input type="checkbox" id="gender-male" name="gender" value="male" />
+        Male
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          id="gender-female"
+          name="gender"
+          value="female"
+        />
+        Female
+      </label>
+      <!-- <label>
+        <input type="checkbox" id="gender-other" name="gender" value="other" />
+        Other
+      </label> -->
+      <br />
+
+      <label for="phone">Phone:</label>
+      <input type="number" id="phone" name="phone" /><br />
+
+      <label for="email">Email:</label>
+      <input type="text" id="email" name="email" /><br />
+
+      <label for="role">Role:</label>
+      <select id="role" name="role"></select>
+      <br /><br />
+
+      <label for="IsActive">IsActive:</label>
+      <input type="radio" id="isActiveYes" name="IsActive" value="Yes" />Yes
+      <input type="radio" id="isActiveNo" name="IsActive" value="No" />No
+      <br />
+
+      <div style="text-align: center">
+        <button type="button" onclick="submitForm()" style="margin-right: 47%">
+          Submit
+        </button>
+      </div>
+    </form>
+    <div style="text-align: center; margin-top: 10px">
+      <span id="err" style="color: red; font-weight: bolder"></span>
+    </div>
+    <!-- <script src="api.js"></script> -->
+    <script>
+      // const backend = "http://localhost:4000";
+      //fectching contents from get method to display in dropdown
+      const dropdown = document.getElementById("role");
+
+      fetch("/user")
+        .then((response) => response.json())
+        .then((data) => {
+          dropdown.innerHTML = "";
+          const valuesAdded = []; // Keep track of values that have been added
+          data.users.forEach((user) => {
+            const role = user.role;
+            if (!valuesAdded.includes(role)) {
+              // Check if value has already been added
+              const option = document.createElement("option");
+              option.text = role;
+              option.value = role;
+              dropdown.add(option);
+              valuesAdded.push(role); // Add value to tracking array
+            }
+          });
+        })
+        .catch((error) => console.error(error));
+
+      function submitForm() {
+        var name = document.getElementById("name").value;
+        var radios = document.getElementsByName("gender");
+        var selectedValue;
+        for (var i = 0; i < radios.length; i++) {
+          if (radios[i].checked) {
+            selectedValue = radios[i].value;
+            break;
+          }
+        }
+
+        var email = document.getElementById("email").value;
+        var phone = document.getElementById("phone").value;
+        var role = document.getElementById("role").value;
+
+        if (!name) {
+          document.getElementById("err").innerHTML = "Name is required";
+        } else if (!selectedValue) {
+          document.getElementById("err").innerHTML = "Gender is required";
+        } else if (!phone) {
+          document.getElementById("err").innerHTML = "Phone is required";
+        } else if (!email) {
+          document.getElementById("err").innerHTML = "Email is required";
+        } else if (!role) {
+          document.getElementById("err").innerHTML = "Role is required";
+        } else {
+          const userData = {
+            userName: name,
+            gender: selectedValue,
+            mobileNumber: phone,
+            email: email,
+            role: role,
+          };
+
+          fetch("/user", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userData),
+          })
+            .then((response) => {
+              if (response.ok) {
+                return response.json();
+              }
+              throw new Error("Network response was not ok.");
+            })
+            .then((data) => {
+              console.log("Response data", data);
+              alert("User saved successfully");
+            })
+            .catch((error) => {
+              console.error(
+                "There was a problem with the fetch operation:",
+                error
+              );
+            });
+        }
+      }
+    </script>
+  </body>
+</html>
