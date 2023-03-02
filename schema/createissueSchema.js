@@ -4,6 +4,11 @@ mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', true)
 
 const createIssue = new mongoose.Schema({
+    createissueid: {
+        type: Number,
+        required: true,
+        unique: true
+    },
     Title: {
         type: String,
         required: true
@@ -22,6 +27,21 @@ const createIssue = new mongoose.Schema({
     status: {
         type: String,
         required: true
+    },
+    severity: {
+        type: String,
+        required: true
+    },
+    priority: {
+        type: Number,
+        enum: [1, 2, 3, 4],
+        required: true
+    },
+    label: {
+        type: String,
+        required: true,
+        minlength: 3,
+        maxlength: 10
     }
 
 })

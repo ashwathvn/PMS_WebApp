@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["development", "Testing"],
+        enum: ["Development", "Testing"],
         required: true
     },
     time: {
