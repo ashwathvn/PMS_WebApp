@@ -1,70 +1,16 @@
-// // Fetch options for issue type dropdown
-// fetch('/api/allissues')
-//   .then(response => response.json())
-//   .then(data => {
-//     const issueTypeDropdown = document.getElementById('issue-type');
-//     data.forEach(issueType => {
-//       const option = document.createElement('option');
-//       option.value = issueType.value;
-//       option.text = issueType.label;
-//       issueTypeDropdown.appendChild(option);
-//     });
-//   });
 const dropdown = document.getElementById('issue');
 
-fetch('/allissues')
+fetch('/issues')
   .then(response => response.json())
   .then(data => {
-    dropdown.innerHTML = '';
-    data.users.forEach(issue => { // modified to access users array
-      const option = document.createElement('option');
-      option.text = issue.role; // modified to access role property
-      option.value = issue.role; // modified to access role property
-      dropdown.add(option);
+    console.log("Issues", data);
+    data.forEach(issue => {
+      if (issue.Title && issue.description && issue.issue && issue.status && issue.priority && issue.severity) {
+        addBugToList(issue.Title, issue.description, issue.issue, issue.status, issue.priority, issue.severity);
+      }
     });
   })
   .catch(error => console.error(error));
-
-
-
-// // Fetch options for status type dropdown
-// fetch('/api/status-types')
-//   .then(response => response.json())
-//   .then(data => {
-//     const statusTypeDropdown = document.getElementById('status-type');
-//     data.forEach(statusType => {
-//       const option = document.createElement('option');
-//       option.value = statusType.value;
-//       option.text = statusType.label;
-//       statusTypeDropdown.appendChild(option);
-//     });
-//   });
-
-// // Fetch options for priority dropdown
-// fetch('/api/priorities')
-//   .then(response => response.json())
-//   .then(data => {
-//     const priorityDropdown = document.getElementById('priority');
-//     data.forEach(priority => {
-//       const option = document.createElement('option');
-//       option.value = priority.value;
-//       option.text = priority.label;
-//       priorityDropdown.appendChild(option);
-//     });
-//   });
-
-// // Fetch options for severity dropdown
-// fetch('/api/severities')
-//   .then(response => response.json())
-//   .then(data => {
-//     const severityDropdown = document.getElementById('severity');
-//     data.forEach(severity => {
-//       const option = document.createElement('option');
-//       option.value = severity.value;
-//       option.text = severity.label;
-//       severityDropdown.appendChild(option);
-//     });
-//   });
 
 // JavaScript code
 const bugsList = document.getElementById('bugs-list');
@@ -120,21 +66,30 @@ function addBugToList(name, description, issueType, statusType, priority, severi
 // Event listener for form submission
 bugForm.addEventListener('submit', (event) => {
   event.preventDefault();
+  bugForm.reset();
 
-  const bugName = document.getElementById('bug-name').value;
-  const bugDescription = document.getElementById('bug-description').value;
-  const issueType = document.getElementById('issue-type').value;
-  const statusType = document.getElementById('status-type').value;
-  const priority = document.getElementById('priority').value;
-  const severity = document.getElementById('severity').value;
+fetch('/issues')
+    .then(response => response.json())
+    .then(data => {
+      console.log("Issues", data);
+      data.forEach(issue => {
+        if (issue.Title && issue.description && issue.issue && issue.status && issue.priority && issue.severity) {
+          addBugToList(issue.Title, issue.description, issue.issue, issue.status, issue.priority, issue.severity);
+        }
+      });
+    })
+    .catch(error => console.error(error));
+  // const bugName = document.getElementById('bug-name').value;
+  // const bugDescription = document.getElementById('bug-description').value;
+  // const issueType = document.getElementById('issue-type').text;
+  // const statusType = document.getElementById('status-type').text;
+  // const priority = document.getElementById('priority').text;
+  // const severity = document.getElementById('severity').text;
   //const file = document.getElementById('file-upload').files[0];
 
-  if (bugName.trim() === '' || bugDescription.trim() === '') {
-    alert('Please enter a bug name and description.');
-    return;
-  }
-  alert("Saved successfully!");
-  addBugToList(bugName, bugDescription, issueType, statusType, priority, severity);
-  bugForm.reset();
+  // if (bugName.trim() === '' || bugDescription.trim() === '') {
+  //   alert('Please enter a bug name and description.');
+  //   return;
+  // }
 });
 
