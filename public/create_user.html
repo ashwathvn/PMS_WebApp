@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="UI.css" />
   </head>
   <body>
+    <a href="home.html"><button>Back</button></a>
     <h2>CREATE NEW USER</h2>
     <form id="create-user-form" action="" method="post">
       <!-- <label for="id">ID:</label>
@@ -14,23 +15,13 @@
       <input type="text" id="name" name="name" /><br />
 
       <label for="gender">Gender:</label>
-      <label>
-        <input type="checkbox" id="gender-male" name="gender" value="male" />
-        Male
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          id="gender-female"
-          name="gender"
-          value="female"
-        />
-        Female
-      </label>
-      <!-- <label>
-        <input type="checkbox" id="gender-other" name="gender" value="other" />
-        Other
-      </label> -->
+      <input type="radio" id="gender-male" name="gender" value="male" />Male
+      <input
+        type="radio"
+        id="gender-female"
+        name="gender"
+        value="female"
+      />Female
       <br />
 
       <label for="phone">Phone:</label>
@@ -49,7 +40,12 @@
       <br />
 
       <div style="text-align: center">
-        <button type="button" onclick="submitForm()" style="margin-right: 47%">
+        <button
+          id="save-btn"
+          type="button"
+          onclick="submitForm()"
+          style="margin-right: 47%"
+        >
           Submit
         </button>
       </div>
@@ -83,19 +79,50 @@
         .catch((error) => console.error(error));
 
       function submitForm() {
-        var name = document.getElementById("name").value;
-        var radios = document.getElementsByName("gender");
-        var selectedValue;
-        for (var i = 0; i < radios.length; i++) {
+        const saveBtn = document.getElementById("save-btn");
+        const form = document.getElementById("create-user-form");
+
+        // saveBtn.addEventListener("click", () => {
+        // Retrieve input values
+        const displayname = form.elements["name"].value;
+        const displaygender = form.elements["gender"].value;
+        const displayemail = form.elements["email"].value;
+        const displayphone = form.elements["phone"].value;
+        const displayrole = form.elements["role"].value;
+        const displayisActive = form.elements["IsActive"].value;
+
+        // Create a div element to hold the user details
+        const userDiv = document.createElement("div");
+
+        // Populate the user div with the input values
+        userDiv.innerHTML = `
+                <h2>User Details:</h2>
+                <p>Name: ${displayname}</p>
+                <p>Gender: ${displaygender}</p>
+                <p>Email: ${displayemail}</p>
+                <p>Phone Number: ${displayphone}</p>
+                <p>Role: ${displayrole}</p>
+                <p>IsActive: ${displayisActive}</p>
+              `;
+
+        // Append the user div to the body of the page
+        userDiv.setAttribute("style", "text-align: center");
+        document.body.appendChild(userDiv);
+
+        //Posting userdata to db
+        let name = document.getElementById("name").value;
+        let radios = document.getElementsByName("gender");
+        let selectedValue;
+        for (let i = 0; i < radios.length; i++) {
           if (radios[i].checked) {
             selectedValue = radios[i].value;
             break;
           }
         }
 
-        var email = document.getElementById("email").value;
-        var phone = document.getElementById("phone").value;
-        var role = document.getElementById("role").value;
+        let email = document.getElementById("email").value;
+        let phone = document.getElementById("phone").value;
+        let role = document.getElementById("role").value;
 
         if (!name) {
           document.getElementById("err").innerHTML = "Name is required";
@@ -140,7 +167,10 @@
               );
             });
         }
+        form.reset();
       }
+
+      //Onclick of save button to display contents
     </script>
   </body>
 </html>
