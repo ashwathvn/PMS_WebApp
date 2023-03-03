@@ -15,6 +15,23 @@ button {
   margin-top: 30px;
 }
 
+button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: #3e8e41;
+}
+
 /* Style for the create user form */
 #create-user-form {
   margin-top: 20px;
