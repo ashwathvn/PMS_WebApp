@@ -6,7 +6,7 @@
   </head>
   <body>
     <header>
-      <h1 style="margin-left: 20px;">Bug Tracking Tool</h1>
+      <h1 style="margin-left: 20px">Bug Tracking Tool</h1>
     </header>
     <a href="home.html"><button>Back</button></a>
     <main>
@@ -22,6 +22,15 @@
           <label for="bug-description">Description:</label>
           <textarea id="bug-description" name="bug-description"></textarea>
           <div class="dropdown">
+            <label for="role">Department:</label>
+            <select id="role" name="role"></select>
+          </div>
+          <div class="dropdown">
+            <label for="user">Assign to:</label>
+            <select id="user" name="user"></select>
+          </div>
+          <br /><br />
+          <div class="dropdown">
             <label for="issue-type">Issue type:</label>
             <select id="issue-type" name="issue-type"></select>
           </div>
@@ -33,6 +42,7 @@
           <div class="dropdown">
             <label for="priority">Priority:</label>
             <select id="priority" name="priority">
+              <option value="">Select</option>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -44,13 +54,22 @@
             <select id="severity" name="severity"></select>
           </div>
           <br /><br />
+          <label for="bug_label">Tags/Labels:</label>
+          <input type="text" id="bug_label" name="bug_label" />
           <!-- <label for="bug-file">Upload File:</label>
           <input type="file" id="bug-file" name="bug-file"> -->
           <button type="submit" onclick="submitIssue()">Submit</button>
         </form>
       </section>
     </main>
-    <div style="text-align: end; margin-right: 340px">
+    <div
+      style="
+        text-align: end;
+        margin-right: 340px;
+        margin-bottom: 20px;
+        margin-top: -20px;
+      "
+    >
       <span id="err" style="color: red; font-weight: bolder"></span>
     </div>
     <footer></footer>
@@ -59,12 +78,63 @@
       const statusTypeDropdown = document.getElementById("status-type");
       const priorityDropdown = document.getElementById("priority");
       const severityDropdown = document.getElementById("severity");
+      const department = document.getElementById("role");
+      const userdisplay = document.getElementById("user");
+
+      // fectching data for role
+      fetch("/user")
+        .then((response) => response.json())
+        .then((data) => {
+          department.innerHTML = "";
+          const option = document.createElement("option");
+          option.text = "Select";
+          department.add(option);
+          const valuesAdded = []; // Keep track of values that have been added
+          data.users.forEach((user) => {
+            const role = user.role;
+            if (!valuesAdded.includes(role)) {
+              // Check if value has already been added
+              const option = document.createElement("option");
+              option.text = role;
+              option.value = role;
+              department.add(option);
+              valuesAdded.push(role); // Add value to tracking array
+            }
+          });
+        })
+        .catch((error) => console.error(error));
+
+      department.addEventListener("change", function () {
+        const selectedDept = department.value;
+        fetch("/user")
+          .then((response) => response.json())
+          .then((data) => {
+            userdisplay.innerHTML = "";
+            const option = document.createElement("option");
+            option.text = "Select";
+            userdisplay.add(option);
+            const valuesAdded = []; // Keep track of values that have been added
+            data.users.forEach((user) => {
+              const role = user.role;
+              if (role === selectedDept) {
+                const option = document.createElement("option");
+                option.text = user.userName;
+                option.value = user.empid;
+                userdisplay.add(option);
+              }
+            });
+          })
+          .catch((error) => console.error(error));
+      });
 
       fetch("/allissues")
         .then((response) => response.json())
         .then((data) => {
           // Populate issue type dropdown
           issueTypeDropdown.innerHTML = "";
+          const option = document.createElement("option");
+          option.text = "Select";
+          issueTypeDropdown.add(option);
           const uniqueOptions = new Set();
           data.forEach((issueType) => {
             if (!uniqueOptions.has(issueType.issue)) {
@@ -83,6 +153,9 @@
         .then((response) => response.json())
         .then((data) => {
           statusTypeDropdown.innerHTML = "";
+          const option = document.createElement("option");
+          option.text = "Select";
+          statusTypeDropdown.add(option);
           const uniqueOptions = new Set();
           data.forEach((statusType) => {
             if (!uniqueOptions.has(statusType.status)) {
@@ -96,29 +169,14 @@
         })
         .catch((error) => console.error(error));
 
-      // Populate priority dropdown
-      // fetch('/issues')
-      //   .then(response => response.json())
-      //   .then(data => {
-      //     priorityDropdown.innerHTML = '';
-      //     const uniqueOptions = new Set();
-      //     data.forEach(issues => {
-      //       if (!uniqueOptions.has(issues.priority)) {
-      //         const option = document.createElement('option');
-      //         option.value = issues.priority;
-      //         option.text = issues.priority;
-      //         priorityDropdown.add(option);
-      //         uniqueOptions.add(issues.priority);
-      //       }
-      //     });
-      //   })
-      //   .catch(error => console.error(error));
-
       // Populate severity dropdown
       fetch("/allseverities")
         .then((response) => response.json())
         .then((data) => {
           severityDropdown.innerHTML = "";
+          const option = document.createElement("option");
+          option.text = "Select";
+          severityDropdown.add(option);
           const uniqueOptions = new Set();
           data.forEach((severity) => {
             if (!uniqueOptions.has(severity.severity)) {
@@ -139,11 +197,15 @@
         var statusType = document.getElementById("status-type").value;
         var priority = document.getElementById("priority").value;
         var severity = document.getElementById("severity").value;
+        var tag_label = document.getElementById("bug_label").value;
+        var assigne = document.getElementById("user").value;
 
         if (!title) {
           document.getElementById("err").innerHTML = "Title is required";
         } else if (!desc) {
           document.getElementById("err").innerHTML = "Description is required";
+        } else if (!assigne) {
+          document.getElementById("err").innerHTML = "Assign to is required";
         } else if (!issueType) {
           document.getElementById("err").innerHTML = "Issue Type is required";
         } else if (!statusType) {
@@ -152,6 +214,8 @@
           document.getElementById("err").innerHTML = "Priority is required";
         } else if (!severity) {
           document.getElementById("err").innerHTML = "Severity is required";
+        } else if (!tag_label) {
+          document.getElementById("err").innerHTML = "Tag/Label is required";
         } else {
           const issueData = {
             Title: title,
@@ -160,8 +224,8 @@
             sid: statusType,
             priority: priority,
             severityid: severity,
-            empid: 2,
-            label: "CUSTOMER",
+            empid: assigne,
+            label: tag_label,
           };
 
           fetch("/createissue", {
@@ -178,7 +242,6 @@
               throw new Error("Network response was not ok.");
             })
             .then((data) => {
-              console.log("Response data", data);
               alert("Issue created successfully");
             })
             .catch((error) => {
