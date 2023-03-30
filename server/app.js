@@ -1,10 +1,13 @@
 const express = require('express')
 const app = express()
+var cors = require('cors');
 
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', true)
+
+app.use(cors());
 
 const connectionParams = {
     useNewUrlParser: true,
