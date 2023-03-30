@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Users</title>
+  </head>
+  <body>
+    <div>
+      <h2>All users</h2>
+      <div id="user_list"></div>
+    </div>
+
+    <script>
+      async function getAllUsers() {
+        fetch("/user")
+          .then((response) => response.json())
+          .then((data) => {
+            const listObj = document.getElementById("user_list");
+            data.users.forEach((user) => {
+              const li = document.createElement("ul");
+              const idh3 = document.createElement("h3");
+              const nameh3 = document.createElement("h3");
+              const emailp = document.createElement("p");
+              const genderp = document.createElement("p");
+              const phonep = document.createElement("p");
+              const rolep = document.createElement("p");
+              li.style.backgroundColor = "Grey";
+              li.style.padding = "10px";
+              li.style.paddingLeft = "25px";
+
+              idh3.innerText = `Id: ${user.empid}`;
+              nameh3.innerText = `Name: ${user.userName}`;
+              emailp.innerText = `Email: ${user.email}`;
+              genderp.innerText = `Gender: ${user.gender}`;
+              phonep.innerText = `Phone: ${user.mobileNumber}`;
+              rolep.innerText = `Role: ${user.role}`;
+
+              li.appendChild(idh3);
+              li.appendChild(nameh3);
+              li.appendChild(emailp);
+              li.appendChild(genderp);
+              li.appendChild(phonep);
+              li.appendChild(rolep);
+              listObj.appendChild(li);
+            });
+          })
+          .catch((err) => console.log("Error in fetching user", err));
+      }
+      getAllUsers();
+    </script>
+  </body>
+</html>
