@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bug Tracker</title>
+    <link rel="stylesheet" href="UI.css" />
+  </head>
+  <body>
+    <h1>Bug Tracker Application</h1>
+    <div class="button">
+      <button id="create-user-btn">Create User</button>
+      <button id="create-issue-btn">Create Issue</button>
+    </div>
+    <div class="button">
+      <button id="view_users">View Users</button>
+      <button id="view_issues">View Issues</button>
+    </div>
+    <script>
+      // Get the create user button
+      const createUserBtn = document.getElementById("create-user-btn");
+
+      // Add event listener to the create user button to redirect to the create user page
+      createUserBtn.addEventListener("click", () => {
+        // Redirect to the create user page
+        window.location.href = "create_user.html";
+      });
+      const createIssueBtn = document.getElementById("create-issue-btn");
+
+      createIssueBtn.addEventListener("click", () => {
+        window.location.href = "create_issue.html";
+      });
+
+      const viewUserBtn = document.getElementById("view_users");
+
+      viewUserBtn.addEventListener("click", () => {
+        window.location.href = "view_users.html";
+      });
+    </script>
+  </body>
+</html>

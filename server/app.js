@@ -1,11 +1,19 @@
+
 const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
+
+
+const app = express()
+var cors = require('cors');
+
 
 var router = express();
 router.use(express.json());
 mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', true)
+
+app.use(cors());
 
 const connectionParams = {
   useNewUrlParser: true,
@@ -13,6 +21,7 @@ const connectionParams = {
 };
 
 const url = 'mongodb://127.0.0.1/new_bugtracker1';
+
 
 mongoose.connect(url, connectionParams)
   .then(() => {
@@ -25,6 +34,11 @@ mongoose.connect(url, connectionParams)
 
 const path = require('path');
 router.use(express.static(path.join(__dirname, '../public')));
+
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Use process.env to access environment variables defined in .env file
+
 
 
 

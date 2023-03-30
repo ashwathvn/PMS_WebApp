@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema({
     mobileNumber: {
         type: Number,
         required: true,
+        unique: true,
         validate: {
             validator: function (v) {
                 return /\d{10}/.test(v); // check if the phone number has at least 10 digits
@@ -32,6 +33,8 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: 'Email address is required',
+        unique: true,
+        index: true,
         match: [/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/, 'The e-mail can contain words, numbers, underscore, dot and @ {ex:@gmail.com}']
     },
     role: {
@@ -44,6 +47,7 @@ const userSchema = new mongoose.Schema({
         default: () => Date.now()
     }
 })
+userSchema.index({ email: 1 }, { unique: true });
 
 const userInfo = mongoose.model('userInfo', userSchema);
 module.exports = userInfo;
