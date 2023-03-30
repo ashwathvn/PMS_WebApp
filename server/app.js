@@ -1,44 +1,57 @@
-const express = require('express')
+
+const mongoose = require('mongoose');
+const express = require('express');
+const bodyParser = require('body-parser');
+
+
 const app = express()
 var cors = require('cors');
 
-const bodyParser = require('body-parser')
-const mongoose = require('mongoose')
+
+var router = express();
+router.use(express.json());
 mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', true)
 
 app.use(cors());
 
 const connectionParams = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+};
+
+const url = 'mongodb://127.0.0.1/new_bugtracker1';
+
+
+mongoose.connect(url, connectionParams)
+  .then(() => {
+    console.log('Database connection success');
+  })
+  .catch((err) => {
+    console.log('Database connection failed', err);
+  });
+
 
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+router.use(express.static(path.join(__dirname, '../public')));
 
 app.use(express.static(path.join(__dirname, '../public')));
 
 // Use process.env to access environment variables defined in .env file
 
 
-mongoose.connect(process.env.MONGODB_URL /* || "mongodb://localhost/AppointmentOfDoc" */, connectionParams, (err) => {
-    if (err) {
-        console.log("Database connection failed", err.message);
-        console.log(__dirname)
-    } else {
-        console.log("Database connection success");
-    }
+
+
+router.use(bodyParser.json())
+
+router.use('/', require('../api/apiCreateIssue'))
+router.use('/', require('../api/apiIssue'))
+router.use('/', require('../api/apiStatus'))
+router.use('/', require('../api/apiUser'))
+router.use('/', require('../api/apiSeverity'))
+router.use('/', require('../api/apiProject'))
+
+router.listen(4000, function () {
+    console.log(`Server started at http://localhost:4000`);
 })
-
-app.use(bodyParser.json())
-
-app.use('/', require('../api/apiCreateIssue'))
-app.use('/', require('../api/apiIssue'))
-app.use('/', require('../api/apiStatus'))
-app.use('/', require('../api/apiUser'))
-app.use('/', require('../api/apiSeverity'))
-
-app.listen(process.env.PORT || 4000, function () {
-    console.log(`Server started at http://localhost:${process.env.PORT}`);
-})
+module.exports = router;
