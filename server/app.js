@@ -20,7 +20,7 @@ const connectionParams = {
   useUnifiedTopology: true,
 };
 
-const url = 'mongodb://127.0.0.1/new_bugtracker1';
+const url = "mongodb://root:root@ac-qhvwcbo-shard-00-00.fbiiyif.mongodb.net:27017,ac-qhvwcbo-shard-00-01.fbiiyif.mongodb.net:27017,ac-qhvwcbo-shard-00-02.fbiiyif.mongodb.net:27017/DefectTracker?ssl=true&replicaSet=atlas-relxiz-shard-0&authSource=admin&retryWrites=true&w=majority";
 
 
 mongoose.connect(url, connectionParams)
@@ -52,6 +52,6 @@ router.use('/', require('../api/apiSeverity'))
 router.use('/', require('../api/apiProject'))
 
 router.listen(4000, function () {
-    console.log(`Server started at http://localhost:4000`);
+  console.log(`Server started at http://localhost:4000`);
 })
 module.exports = router;
