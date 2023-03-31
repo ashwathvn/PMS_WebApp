@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const debugmodel = require('../schema/statusSchema')
+var cors = require('cors');
 
 const router = express.Router();
 //Create a new bug status
@@ -30,11 +31,12 @@ router.post('/status', async (req, res) => {
 })
 
 //Get all bug statuses
-router.get('/getallstatus', function (req, res) {
+router.get('/getallstatus', cors(), function (req, res) {
     debugmodel.find((err, val) => {
         if (err) {
             console.log("Error in getting all bug status", err);
         } else {
+            res.set('Access-Control-Allow-Origin', '*');
             res.json(val);
         }
     })
