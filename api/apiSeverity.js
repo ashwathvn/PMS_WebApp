@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const severitymodel = require('../schema/severitySchema')
+var cors = require('cors');
 
 const router = express.Router();
 
@@ -30,11 +31,12 @@ router.post('/postseverity', async (req, res) => {
 })
 
 //Get all severity types
-router.get('/allseverities', function (req, res) {
+router.get('/allseverities', cors(), function (req, res) {
     severitymodel.find((err, val) => {
         if (err) {
             console.log("Error in getting all severities", err)
         } else {
+            res.set('Access-Control-Allow-Origin', '*');
             res.json(val)
         }
     })

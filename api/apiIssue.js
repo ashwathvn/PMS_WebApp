@@ -4,6 +4,7 @@ const express = require('express');
 const defectmodel = require('../schema/issueSchema')
 
 const router = express.Router();
+var cors = require('cors');
 
 //Create new issue type
 router.post('/postissue', async (req, res) => {
@@ -31,11 +32,12 @@ router.post('/postissue', async (req, res) => {
 })
 
 //Get all issue types
-router.get('/allissues', function (req, res) {
+router.get('/allissues', cors(), function (req, res) {
     defectmodel.find((err, val) => {
         if (err) {
             console.log("Error in getting all issues", err)
         } else {
+            res.set('Access-Control-Allow-Origin', '*');
             res.json(val)
         }
     })
