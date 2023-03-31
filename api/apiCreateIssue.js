@@ -88,6 +88,7 @@ router.post('/createissue', async (req, res) => {
 router.get('/issues', async (req, res) => {
   try {
     const issues = await issueDB.find();
+    res.set('Access-Control-Allow-Origin', '*');
     res.send(issues);
   } catch (err) {
     res.status(400).send({ error: err });

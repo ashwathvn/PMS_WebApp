@@ -49,7 +49,8 @@ router.post('/user', async (req, res) => {
 // Get all users
 router.get('/user', (req, res) => {
     userInfo.find({})
-        .then(users => res.send({ users }))
+        .then(users => {res.set('Access-Control-Allow-Origin', '*')
+        res.send({ users })})
         .catch(err => {
             console.log("Error in getting all users", err);
             res.status(500).send({ error: 'Server error' });
