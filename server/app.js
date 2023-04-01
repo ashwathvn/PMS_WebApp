@@ -3,27 +3,15 @@ const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
 
-
 const app = express()
 var cors = require('cors');
 
-
-var router = express();
-router.use(express.json());
 mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', true)
 
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(function (req, res, next) {
-  // Website you wish to allow to connect
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
-  // Request methods you wish to allow
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT", "PATCH");
-  // Request headers you wish to allow
-  next();
-});
 
 const connectionParams = {
   useNewUrlParser: true,
@@ -41,27 +29,16 @@ mongoose.connect(url, connectionParams)
     console.log('Database connection failed', err);
   });
 
-
-const path = require('path');
-router.use(express.static(path.join(__dirname, '../public')));
-
-app.use(express.static(path.join(__dirname, '../public')));
-
-// Use process.env to access environment variables defined in .env file
-
-
-
-
-router.use(bodyParser.json())
+app.use(bodyParser.json())
 console.log("Sample")
-router.use('/', require('../api/apiCreateIssue'))
-router.use('/', require('../api/apiIssue'))
-router.use('/', require('../api/apiStatus'))
-router.use('/', require('../api/apiUser'))
-router.use('/', require('../api/apiSeverity'))
-router.use('/', require('../api/apiProject'))
+app.use('/', require('../api/apiCreateIssue'))
+app.use('/', require('../api/apiIssue'))
+app.use('/', require('../api/apiStatus'))
+app.use('/', require('../api/apiUser'))
+app.use('/', require('../api/apiSeverity'))
+app.use('/', require('../api/apiProject'))
 
-router.listen(4000, function () {
+app.listen(4000, function () {
   console.log(`Server started at http://localhost:4000`);
 })
-module.exports = router;
+module.exports = app;
