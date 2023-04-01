@@ -14,6 +14,16 @@ mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', true)
 
 app.use(cors());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(function (req, res, next) {
+  // Website you wish to allow to connect
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+  // Request methods you wish to allow
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT", "PATCH");
+  // Request headers you wish to allow
+  next();
+});
 
 const connectionParams = {
   useNewUrlParser: true,
@@ -43,7 +53,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 
 router.use(bodyParser.json())
-
+console.log("Sample")
 router.use('/', require('../api/apiCreateIssue'))
 router.use('/', require('../api/apiIssue'))
 router.use('/', require('../api/apiStatus'))

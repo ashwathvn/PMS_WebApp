@@ -18,10 +18,10 @@ router.post('/project', async (req, res) => {
 });
 
 // Get all projects
-router.get('/project', cors(), async (req, res) => {
+router.get('/project', async (req, res) => {
   try {
     const projects = await projectModel.find({});
-    res.set('Access-Control-Allow-Origin', '*');
+    // res.set('Access-Control-Allow-Origin', '*');
     res.send(projects);
   } catch (err) {
     console.error(err);
