@@ -7,15 +7,6 @@ const defectmodel = require('../schema/issueSchema')
 const userInfo = require('../schema/userSchema')
 const severitymodel = require('../schema/severitySchema')
 
-// const autoIncrement = require('mongoose-auto-increment');
-var cors = require('cors');
-var corsOptions = {
-  "origin": "*",
-  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-  "preflightContinue": false,
-  "optionsSuccessStatus": 204
-}
-
 const router = express.Router();
 mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', true)
@@ -23,8 +14,7 @@ mongoose.set('strictQuery', true)
 
 //create issue
 
-router.post('/createissue', async (req, res, next) => {
-  console.log("Create issue api")
+router.post('/createissue', async (req, res) => {
   const { sid } = req.body; // getting unique data from postman
   const { issueid } = req.body; // getting unique data from postman
   const { empid } = req.body; // getting unique data from postman
@@ -86,11 +76,6 @@ router.post('/createissue', async (req, res, next) => {
     if (err) {
       res.status(400).send({ error: err })
     } else {
-      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4000');
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-      res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-      res.setHeader('Access-Control-Allow-Credentials', true);
-      next();
       res.send({ message: 'data entered' })
     }
   })
