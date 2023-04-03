@@ -45,6 +45,11 @@ const userSchema = new mongoose.Schema({
     time: {
         type: Date,
         default: () => Date.now()
+    },
+    isactive: {
+        type: String,
+        enum: ["Yes", "No"],
+        required: true
     }
 })
 userSchema.index({ email: 1 }, { unique: true });
