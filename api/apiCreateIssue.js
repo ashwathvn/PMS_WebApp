@@ -1,7 +1,7 @@
 
 const mongoose = require('mongoose');
 const express = require('express');
-const issueDB = require('../schema/createIssueSchema')
+const issueDB = require('../schema/createissueSchema')
 const debugmodel = require('../schema/statusSchema')
 const defectmodel = require('../schema/issueSchema')
 const userInfo = require('../schema/userSchema')
