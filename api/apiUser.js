@@ -24,7 +24,8 @@ router.post('/user', async (req, res) => {
         gender: req.body.gender,
         mobileNumber: req.body.mobileNumber,
         email: req.body.email,
-        role: req.body.role
+        role: req.body.role,
+        isactive:req.body.isactive
     });
     newUser.save()
         .then(db =>
