@@ -30,7 +30,6 @@ mongoose.connect(url, connectionParams)
   });
 
 app.use(bodyParser.json())
-console.log("Sample")
 app.use('/', require('../api/apiCreateIssue'))
 app.use('/', require('../api/apiIssue'))
 app.use('/', require('../api/apiStatus'))
