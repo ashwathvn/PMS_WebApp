@@ -3,7 +3,7 @@ mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', true);
 
 const projectSchema = new mongoose.Schema({
-  id: { type: String, required: true, unique: true },
+  id: { type: Number, required: true, unique: true },
   name: { type: String, required: true },
   primaryOwner: { type: String, required: true },
   secondaryOwner: { type: String, required: true },

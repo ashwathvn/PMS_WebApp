@@ -7,14 +7,30 @@ const router = express.Router();
 
 // Create a new project
 router.post('/project', async (req, res) => {
-  try {
-    const newProject = new projectModel(req.body);
-    await newProject.save();
-    res.send(newProject);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({ error: 'Server error' });
+  let incrProjId;
+  let lastProject = await projectModel.findOne().sort({ _id: -1 });
+  if (!lastProject) {
+    incrProjId = 1;
+  } else {
+    incrProjId = lastProject.id + 1;
   }
+
+  let newProject = new projectModel({
+    id: incrProjId,
+    name: req.body.name,
+    primaryOwner: req.body.primaryOwner,
+    secondaryOwner: req.body.secondaryOwner,
+    isActive: req.body.isActive,
+    description: req.body.description,
+  });
+  await newProject.save().then(response => {
+    console.log(response)
+    res.json(response)
+  })
+    .catch(err => {
+      console.log("Error in saving data", err)
+      res.status(500).send({ error: err.message });
+    });
 });
 
 // Get all projects

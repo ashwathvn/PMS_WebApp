@@ -37,6 +37,10 @@ const createIssue = new mongoose.Schema({
         enum: [1, 2, 3, 4],
         required: true
     },
+    project: {
+        type: String,
+        required: true
+    },
     label: {
         type: String,
         required: true,

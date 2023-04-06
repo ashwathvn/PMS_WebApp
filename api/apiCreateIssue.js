@@ -6,6 +6,7 @@ const debugmodel = require('../schema/statusSchema')
 const defectmodel = require('../schema/issueSchema')
 const userInfo = require('../schema/userSchema')
 const severitymodel = require('../schema/severitySchema')
+const projectModel = require("../schema/projectSchema")
 
 const router = express.Router();
 mongoose.Promise = global.Promise;
@@ -19,6 +20,7 @@ router.post('/createissue', async (req, res) => {
   const { issueid } = req.body; // getting unique data from postman
   const { empid } = req.body; // getting unique data from postman
   const { severityid } = req.body; // getting unique data from postman
+  const { projectid } = req.body;
 
 
   const debugUser = await debugmodel.findOne({ sid });
@@ -41,21 +43,24 @@ router.post('/createissue', async (req, res) => {
 
   const severitydata = await severitymodel.findOne({ severityid });
   if (!severitydata) {
-    return res.status(404).send({ error: 'User not found in  empid' });
+    return res.status(404).send({ error: 'User not found in  severityid' });
   }
   const { severity } = severitydata;
+
+  const projectdata = await projectModel.findOne({ projectid });
+  if (!projectdata) {
+    return res.status(404).send({ error: 'User not found in  projectid' });
+  }
+  const { name } = projectdata;
 
   let incrCreateIssueId;
   let lastIssue = await issueDB.findOne().sort({ _id: -1 });
   if (!lastIssue) {
-    console.log("Not found")
     incrCreateIssueId = 1;
   } else {
-    console.log("Found")
     if (lastIssue.createissueid) {
       incrCreateIssueId = lastIssue.createissueid + 1;
     } else {
-      console.log("No createissueid for last issue")
       incrCreateIssueId = 1;
     }
   }
@@ -69,6 +74,7 @@ router.post('/createissue', async (req, res) => {
     status: status,
     severity: severity,
     priority: req.body.priority,
+    project: name,
     label: req.body.label
   });
 
@@ -136,7 +142,7 @@ router.delete('/issues/:title', async (req, res) => {
 // PUT request
 router.put('/issues/:title', async (req, res) => {
   const { title } = req.params;
-  const { description, sid, issueid, empid } = req.body;
+  const { description, sid, issueid, empid, severityid, projectid } = req.body;
   try {
     const issueToUpdate = await issueDB.findOne({ Title: title });
     if (!issueToUpdate) {
@@ -166,6 +172,12 @@ router.put('/issues/:title', async (req, res) => {
       }
       const { severitytype } = severity;
 
+      const projectdata = await projectModel.findOne({ projectid });
+      if (!projectdata) {
+        return res.status(404).send({ error: 'User not found in  projectid' });
+      }
+      const { name } = projectdata;
+
       // issueToUpdate.Title = req.params ;
       issueToUpdate.description = description;
       issueToUpdate.assigne = role;
@@ -173,6 +185,7 @@ router.put('/issues/:title', async (req, res) => {
       issueToUpdate.status = status;
       issueToUpdate.severity = severitytype;
       issueToUpdate.priority = req.body.priority;
+      issueToUpdate.project = name;
       issueToUpdate.label = req.body.label;
 
       await issueToUpdate.save();
