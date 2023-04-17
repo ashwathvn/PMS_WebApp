@@ -8,11 +8,7 @@ pipeline {
             }
         }
         
-        stage('Build and deploy') {
-            steps {
-                sh 'npm run build'
-             
-            }
-        }
+        
+        
     }
 }
