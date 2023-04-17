@@ -8,6 +8,12 @@ pipeline {
                
             }
         }
+         
+        stage('Run tests') {
+            steps {
+                bat 'npm test'
+            }
+        }
         
         stage('Start server') {
             steps {
@@ -15,5 +21,6 @@ pipeline {
             }
         }
     }
+}
 }
 
