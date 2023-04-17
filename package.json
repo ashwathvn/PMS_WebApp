@@ -80,7 +80,6 @@
     "whatwg-url": "^11.0.0"
   },
   "scripts": {
-    "test": "mocha test/*.js"
    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
