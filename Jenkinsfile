@@ -8,7 +8,11 @@ pipeline {
             }
         }
         
-        
-        
+        stage('Start server') {
+            steps {
+                bat 'start npm start'
+            }
+        }
     }
 }
+
