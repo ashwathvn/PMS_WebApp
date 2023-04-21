@@ -18,11 +18,11 @@ pipeline {
     
         stage('Build') {
   steps {
-    bat 'npm install -g @angular/cli'
-    bat 'npm build --prod'
+    bat 'npm run build -- --prod'
     echo "Deliver completed"
   }
 }
+
 
     stage('Test') {
     steps {
