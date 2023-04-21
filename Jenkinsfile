@@ -18,7 +18,7 @@ pipeline {
     
         stage('Build') {
   steps {
-    bat 'npm run build'
+    sh 'npm run build'
     echo "Deliver completed"
   }
 }
