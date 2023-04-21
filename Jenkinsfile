@@ -17,11 +17,13 @@ pipeline {
         }
     
         stage('Build') {
-      steps {
-        bat 'npm run build'
-          echo "Deliver completed"
-      }
-    }
+  steps {
+    bat 'npm install -g @angular/cli'
+    bat 'ng build --prod'
+    echo "Deliver completed"
+  }
+}
+
     stage('Test') {
     steps {
         timeout(time: 20, unit: 'MINUTES') {
