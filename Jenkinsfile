@@ -6,6 +6,8 @@ pipeline {
             steps {
                 bat 'npm install mongoose-auto-increment@5.0.1 --force'
                  bat 'npm install mocha --save-dev --force'
+                bat 'npm install mocha-junit-reporter --save-dev --force'
+
                
             }
         }
