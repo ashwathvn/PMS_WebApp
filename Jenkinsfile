@@ -29,6 +29,7 @@ pipeline {
     stage('Test') {
     steps {
         timeout(time: 20, unit: 'MINUTES') {
+            bat 'npm install mongoose-auto-increment@5.0.1 --force'
             bat 'npm install mocha --save-dev'
             bat 'npm test'
             echo "Tests passed"
