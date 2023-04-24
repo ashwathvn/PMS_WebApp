@@ -80,7 +80,7 @@
     "whatwg-url": "^11.0.0"
   },
   "scripts": {
-   "test": "mocha"
+   "test": "mocha --recursive --reporter mocha-junit-reporter --timeout 60000 --exit"
   },
   "repository": {
     "type": "git",
