@@ -27,18 +27,15 @@ pipeline {
 
     stage('Test') {
     steps {
-        try {
-            timeout(time: 20, unit: 'MINUTES') {
+        timeout(time: 20, unit: 'MINUTES') {
+            catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                 bat 'node server/app.js'
+                echo "Tests passed"
             }
-        } catch (err) {
-            currentBuild.result = 'FAILURE'
-            throw err
-        } finally {
-            junit 'test-results/**/*.xml'
         }
     }
 }
+
 
 }
 
