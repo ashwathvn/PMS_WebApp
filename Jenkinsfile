@@ -33,6 +33,13 @@ pipeline {
         }
     }
 }
+}
+    post {
+        always {
+            emailext body: 'Jenkins job has completed.',
+            subject: 'Jenkins job completed',
+            to: 'shettynidhu123@gmail.com'
+        }
     }
 }
 
