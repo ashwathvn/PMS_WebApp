@@ -13,7 +13,7 @@ pipeline {
   stage('Start server') {
     steps {
         script {
-            def cmd = 'npm start'
+            def cmd = 'node server/app.js'
             def process = ''
             if (isUnix()) {
                 process = sh(script: "${cmd} &", returnProcess: true)
