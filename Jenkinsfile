@@ -27,7 +27,7 @@ pipeline {
 
      stage('Test') {
     steps {
-        timeout(time: 20, unit: 'MINUTES') {
+        timeout(time: 5, unit: 'MINUTES') {
             bat 'node server/app.js'
             echo "Tests passed"
         }
