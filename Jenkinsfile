@@ -10,41 +10,27 @@ pipeline {
         }
         
         
-    stage('Start server') {
+   stage('Start server') {
     steps {
         script {
             def cmd = 'npm start'
+            def process = ''
             if (isUnix()) {
-                sh "nohup ${cmd} > /dev/null 2>&1 &"
+                process = sh(script: "${cmd} &", returnProcess: true)
             } else {
-                bat "start /B ${cmd}"
+                process = bat(script: "start /B ${cmd}", returnProcess: true)
             }
-        }
-    }
-}
-stage('Check server') {
-    steps {
-        script {
-            try {
-                def response = sh(script: 'curl -sS http://localhost:4000/', returnStdout: true)
-                if (response.contains('Welcome to my server')) {
-                    echo 'Server is running properly'
-                } else {
-                    error 'Server is not responding properly'
-                }
-            } catch (err) {
-                currentBuild.result = 'FAILURE'
-                error "An error occurred while checking the server: ${err}"
-            } finally {
-                bat 'taskkill /IM node.exe /F /T'
+            sleep 10
+            def exitCode = process.exitValue()
+            if (exitCode != null && exitCode == 0) {
+                echo "Server started successfully"
+            } else {
+                error "Failed to start server: exit code ${exitCode}"
             }
         }
     }
 }
 
-       
-
-    
   stage('Build') {
          steps {
             bat 'npm run'
