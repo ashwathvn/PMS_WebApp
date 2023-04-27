@@ -6,7 +6,6 @@ pipeline {
             steps {
                 bat 'npm install mongoose-auto-increment@5.0.1 --force'
                  bat 'npm install mocha --save-dev --force'
-                bat 'npm install mocha-junit-reporter --save-dev --force'
             }
         }
         
@@ -14,6 +13,23 @@ pipeline {
     stage('Start server') {
             steps {
                 bat 'start npm start'
+            }
+        }
+         stage('Check server') {
+            steps {
+                script {
+                    try {
+                        def response = sh(script: 'curl -sS http://localhost:4000/', returnStdout: true)
+                        if (response.contains('Welcome to my server')) {
+                            echo 'Server is running properly'
+                        } else {
+                            error 'Server is not responding properly'
+                        }
+                    } catch (err) {
+                        currentBuild.result = 'FAILURE'
+                        error "An error occurred while checking the server: ${err}"
+                    }
+                }
             }
         }
     
