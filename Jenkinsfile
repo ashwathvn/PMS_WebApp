@@ -11,29 +11,10 @@ pipeline {
         
         
   stage('Start server') {
-    steps {
-        script {
-            def cmd = 'node server/app.js'
-            def process = ''
-            if (isUnix()) {
-                process = sh(script: "${cmd} &", returnProcess: true)
-            } else {
-                process = bat(script: "start /B ${cmd}", returnProcess: true)
-            }
-            sleep 10
-            if (process != null) {
-                def exitCode = process.exitValue()
-                if (exitCode == 0) {
-                    echo "Server started successfully"
-                } else {
-                    error "Failed to start server: exit code ${exitCode}"
-                }
-            } else {
-                error "Failed to start server: process is null"
+            steps {
+                bat 'start npm start'
             }
         }
-    }
-}
 
 
   stage('Build') {
@@ -44,20 +25,28 @@ pipeline {
        }
 
 
-   stage('Test') {
-  steps {
-    script {
-      try {
-        timeout(time: 20, unit: 'MINUTES') {
-          bat 'node server/app.js'
-          echo "Tests passed"
+  stage('Test') {
+            steps {
+                script {
+                    try {
+                        timeout(time: 20, unit: 'MINUTES') {
+                            def response = sh(script: "curl -s http://localhost:4000", returnStdout: true)
+                            if (response.contains("OK")) {
+                                echo "Server is running properly"
+                            } else {
+                                error "Server is not running properly"
+                            }
+                            bat 'node server/app.js'
+                            echo "Tests passed"
+                        }
+                    } catch (err) {
+                        currentBuild.result = 'FAILURE'
+                        error("An error occurred while running tests: ${err}")
+                    }
+                }
+            }
         }
-      } catch (err) {
-        currentBuild.result = 'FAILURE'
-        error("An error occurred while running tests: ${err}")
-      }
     }
-  }
 }
 
 
