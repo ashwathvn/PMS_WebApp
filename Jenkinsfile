@@ -30,7 +30,7 @@ pipeline {
                 script {
                     try {
                         timeout(time: 20, unit: 'MINUTES') {
-                            def response =  bat 'curl http://localhost:3000'
+                            def response =  bat 'curl http://localhost:4000'
                             if (response.contains("OK")) {
                                 echo "Server is running properly"
                             } else {
