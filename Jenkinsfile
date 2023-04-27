@@ -19,7 +19,8 @@ pipeline {
     steps {
         script {
             try {
-                def response = sh(script: 'curl -sS http://localhost:3000/', returnStdout: true)
+                def response = sh(script: 'http GET http://localhost:4000/', returnStdout: true)
+
                 if (response.contains('Welcome to my server')) {
                     echo 'Server is running properly'
                 } else {
