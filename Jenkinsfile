@@ -25,21 +25,14 @@ pipeline {
        }
 
 
-  stage('Test') {
-            steps {
-                script {
-                    try {
-                        timeout(time: 20, unit: 'MINUTES') {
-                            bat 'node server/app.js'
-                            echo "Tests passed"
-                        }
-                    } catch (err) {
-                        currentBuild.result = 'FAILURE'
-                        error("An error occurred while running tests: ${err}")
-                    }
-                }
-            }
+     stage('Test') {
+    steps {
+        timeout(time: 20, unit: 'MINUTES') {
+            bat 'node server/app.js'
+            echo "Tests passed"
         }
+    }
+}
     }
 }
 
