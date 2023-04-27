@@ -22,6 +22,25 @@ pipeline {
         }
     }
 }
+stage('Check server') {
+    steps {
+        script {
+            try {
+                def response = sh(script: 'curl -sS http://localhost:4000/', returnStdout: true)
+                if (response.contains('Welcome to my server')) {
+                    echo 'Server is running properly'
+                } else {
+                    error 'Server is not responding properly'
+                }
+            } catch (err) {
+                currentBuild.result = 'FAILURE'
+                error "An error occurred while checking the server: ${err}"
+            } finally {
+                bat 'taskkill /IM node.exe /F /T'
+            }
+        }
+    }
+}
 
        
 
