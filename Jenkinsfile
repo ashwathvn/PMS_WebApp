@@ -10,7 +10,7 @@ pipeline {
         }
         
         
-   stage('Start server') {
+  stage('Start server') {
     steps {
         script {
             def cmd = 'npm start'
@@ -21,15 +21,20 @@ pipeline {
                 process = bat(script: "start /B ${cmd}", returnProcess: true)
             }
             sleep 10
-            def exitCode = process.exitValue()
-            if (exitCode != null && exitCode == 0) {
-                echo "Server started successfully"
+            if (process != null) {
+                def exitCode = process.exitValue()
+                if (exitCode == 0) {
+                    echo "Server started successfully"
+                } else {
+                    error "Failed to start server: exit code ${exitCode}"
+                }
             } else {
-                error "Failed to start server: exit code ${exitCode}"
+                error "Failed to start server: process is null"
             }
         }
     }
 }
+
 
   stage('Build') {
          steps {
