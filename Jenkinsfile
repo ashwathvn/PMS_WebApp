@@ -11,10 +11,18 @@ pipeline {
         
         
     stage('Start server') {
-            steps {
-                bat 'start npm start'
+    steps {
+        script {
+            def cmd = 'npm start'
+            if (isUnix()) {
+                sh "nohup ${cmd} > /dev/null 2>&1 &"
+            } else {
+                bat "start /B ${cmd}"
             }
         }
+    }
+}
+
        
 
     
