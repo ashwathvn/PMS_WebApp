@@ -34,16 +34,11 @@ pipeline {
     }
 }
 }
-    post {
-        success {
-            mail to: 'shettynidhu111@gmail.com',
-                 subject: 'Jenkins job completed',
-                 body: 'Jenkins job has completed successfully.'
-        }
-        failure {
-            mail to: 'shettynidhu111@gmail.com',
-                 subject: 'Jenkins job failed',
-                 body: 'Jenkins job has failed. Please check the console output for details.'
+     post {
+        always {
+            emailext body: 'Jenkins job has completed.',
+            subject: 'Jenkins job completed',
+            to: 'shettynidhu111@gmail.com'
         }
     }
 }
