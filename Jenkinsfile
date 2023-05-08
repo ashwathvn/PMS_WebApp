@@ -20,28 +20,8 @@ pipeline {
 
       stage('Start server') {
             steps {
-                bat 'start /B cmd /C "node server/app.js"'
-                powershell '''
-                $ErrorActionPreference = 'Stop'
-                $timeout = 60
-                $url = "http://localhost:4000"
-                do {
-                    Start-Sleep -Seconds 1
-                    $connection = Test-NetConnection -ComputerName localhost -Port 4000
-                    if ($connection.TcpTestSucceeded) {
-                        Write-Host "Server is up and running."
-                        break
-                    } else {
-                        Write-Host "Server is not yet ready. Waiting..."
-                    }
-                    $timeout--
-                } while ($timeout -gt 0)
-    
-                if ($timeout -eq 0) {
-                    throw "Server startup timeout"
-                }
-                '''
-                echo "Server URL: http://localhost:4000"
+                bat "node server/app.js"
+                echo "build completed"
             }
         }
 
