@@ -20,12 +20,14 @@ pipeline {
 
      stage('Start server and Test') {
     steps {
-        timeout(time: 10, unit: 'MINUTES') {
-            bat 'node server/app.js'
-            echo "Tests passed"
+        bat 'start /B cmd /C "node server/app.js"'
+        timeout(time: 1, unit: 'MINUTES') {
+            bat 'while ! nc -z localhost 4000; do sleep 1; done'
         }
+       echo "build completed"
     }
 }
+
 }
       post {
         always {
