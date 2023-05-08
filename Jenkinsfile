@@ -18,7 +18,7 @@ pipeline {
        }
 
 
-     stage('Start server and Test') {
+    stage('Start server and Test') {
     steps {
         bat 'start /B cmd /C "node server/app.js"'
         powershell '''
@@ -42,8 +42,12 @@ pipeline {
         }
         '''
         echo 'build complete'
+        input "Open Server URL" message: "Click 'Proceed' to open the server URL in a new tab", ok: "Proceed", parameters: [
+            [$class: 'StringParameterValue', name: 'URL', value: 'http://localhost:4000']
+        ]
     }
 }
+
 
 
 }
