@@ -21,12 +21,33 @@ pipeline {
      stage('Start server and Test') {
     steps {
         bat 'start /B cmd /C "node server/app.js"'
-        timeout(time: 1, unit: 'MINUTES') {
-            bat 'while ! nc -z localhost 4000; do sleep 1; done'
+        powershell '''
+        $ErrorActionPreference = 'Stop'
+        $timeout = 1
+        $url = "http://localhost:4000"
+        $wc = New-Object System.Net.WebClient
+        do {
+            Start-Sleep -Seconds 1
+            try {
+                $response = $wc.DownloadString($url)
+                if ($response -eq "Server started") {
+                    Write-Host "Server is up and running."
+                    break
+                }
+            } catch {
+                Write-Host "Server is not yet ready. Waiting..."
+            }
+            $timeout--
+        } while ($timeout -gt 0)
+
+        if ($timeout -eq 0) {
+            throw "Server startup timeout"
         }
-       echo "build completed"
+        '''
+        echo 'build complete'
     }
 }
+
 
 }
       post {
