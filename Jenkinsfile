@@ -27,16 +27,19 @@ pipeline {
     }
 }
 }
-     post {
-         success {
-            emailext body: 'Jenkins job has completed successfully.',
-            subject: 'Jenkins job succeeded',
-            to: 'shettynidhu111@gmail.com, shettynidhu123@gmail.com'
-        }
-        failure {
-            emailext body: 'Jenkins job has failed.',
-            subject: 'Jenkins job failed',
-            to: 'shettynidhu111@gmail.com, shettynidhu123@gmail.com'
+      post {
+        always {
+            script {
+                if (currentBuild.result == 'SUCCESS') {
+                    emailext body: 'Jenkins job has completed successfully.',
+                            subject: 'Jenkins job succeeded',
+                            to: 'shettynidhu111@gmail.com, shettynidhu123@gmail.com'
+                } else {
+                    emailext body: 'Jenkins job has failed.',
+                            subject: 'Jenkins job failed',
+                            to: 'shettynidhu111@gmail.com, shettynidhu123@gmail.com'
+                }
+            }
         }
     }
 }
