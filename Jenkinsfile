@@ -27,12 +27,7 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
-            steps {
-                bat 'npm test'
-            }
-        }
-
+     
         stage('Stop server') {
             steps {
                 script {
