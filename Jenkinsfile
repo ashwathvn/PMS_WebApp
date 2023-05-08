@@ -18,20 +18,22 @@ pipeline {
        }
 
 
-      stage('Start server') {
+     stage('Start server') {
             steps {
-                bat "node server/app.js"
-                echo "build completed"
-            }
-        }
+                script {
+                    def serverProcess = null
 
-      
-
-        stage('Stop server') {
-            steps {
-                bat 'taskkill /F /IM node.exe'
-                echo "Server stopped."
-                sleep time: 5*60, unit: 'SECONDS'  // server runs for 5 minutes before stopping
+                    try {
+                        serverProcess = bat(script: "start /B cmd /C \"node server/app.js\"", returnStatus: true)
+                        echo "Server started successfully"
+                        echo "Build completed"
+                    } finally {
+                        if (serverProcess != null) {
+                            bat 'taskkill /F /IM node.exe'
+                            echo "Server stopped."
+                        }
+                    }
+                }
             }
         }
     
