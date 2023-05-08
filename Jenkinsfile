@@ -23,7 +23,7 @@ pipeline {
         bat 'start /B cmd /C "node server/app.js"'
         powershell '''
         $ErrorActionPreference = 'Stop'
-        $timeout = 60
+        $timeout = 300
         $url = "http://localhost:4000"
         do {
             Start-Sleep -Seconds 1
