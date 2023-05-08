@@ -5,44 +5,40 @@ pipeline {
         stage('Install dependencies') {
             steps {
                 bat 'npm install mongoose-auto-increment@5.0.1 --force'
-                 bat 'npm install mocha --save-dev --force'
+                bat 'npm install mocha --save-dev --force'
             }
         }
-        
 
-  stage('Build') {
-         steps {
-            bat 'npm run'
-            echo "Deliver completed"
-          }
-       }
+        stage('Build') {
+            steps {
+                bat 'npm run'
+                echo "Build completed"
+            }
+        }
 
-
-     stage('Start server') {
+        stage('Start server') {
             steps {
                 script {
-                    def serverProcess = null
-
-                    try {
-                        serverProcess = bat(script: "start /B cmd /C \"node server/app.js\"", returnStatus: true)
-                        echo "Server started successfully"
-                        echo "Build completed"
-                    } finally {
-                        if (serverProcess != null) {
-                            bat 'taskkill /F /IM node.exe'
-                            echo "Server stopped."
-                        }
-                    }
+                    bat 'start /B cmd /C "node server/app.js"'
+                    echo "Server started"
                 }
             }
         }
-    
 
+       
 
+        stage('Stop server') {
+            steps {
+                script {
+                    bat 'taskkill /F /IM node.exe'
+                    echo "Server stopped"
+                    sleep time: 5 * 60, unit: 'SECONDS' // Server runs for 5 minutes before stopping
+                }
+            }
+        }
+    }
 
-
-}
-      post {
+    post {
         always {
             script {
                 if (currentBuild.result == 'SUCCESS') {
@@ -58,10 +54,3 @@ pipeline {
         }
     }
 }
-
-
-
-
-
-
-
