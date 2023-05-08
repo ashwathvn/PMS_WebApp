@@ -16,16 +16,22 @@ pipeline {
             }
         }
 
-        stage('Start server') {
+       stage('Start server') {
             steps {
                 script {
                     bat 'start /B cmd /C "node server/app.js"'
                     echo "Server started"
+                    echo "Server URL: http://localhost:4000"
+                    input(message: "Click 'Proceed' to open the server URL in a new tab", ok: "Proceed")
                 }
             }
         }
 
-       
+        stage('Run Tests') {
+            steps {
+                bat 'npm test'
+            }
+        }
 
         stage('Stop server') {
             steps {
