@@ -23,18 +23,15 @@ pipeline {
         bat 'start /B cmd /C "node server/app.js"'
         powershell '''
         $ErrorActionPreference = 'Stop'
-        $timeout = 1
+        $timeout = 60
         $url = "http://localhost:4000"
-        $wc = New-Object System.Net.WebClient
         do {
             Start-Sleep -Seconds 1
-            try {
-                $response = $wc.DownloadString($url)
-                if ($response -eq "Server started") {
-                    Write-Host "Server is up and running."
-                    break
-                }
-            } catch {
+            $connection = Test-NetConnection -ComputerName localhost -Port 4000
+            if ($connection.TcpTestSucceeded) {
+                Write-Host "Server is up and running."
+                break
+            } else {
                 Write-Host "Server is not yet ready. Waiting..."
             }
             $timeout--
