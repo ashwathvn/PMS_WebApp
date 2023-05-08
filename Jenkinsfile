@@ -54,7 +54,7 @@ pipeline {
                 sleep time: 5*60, unit: 'SECONDS'  // server runs for 5 minutes before stopping
             }
         }
-    }
+    
 
 
 
