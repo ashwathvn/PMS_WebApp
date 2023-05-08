@@ -22,7 +22,7 @@ pipeline {
                     bat 'start /B cmd /C "node server/app.js"'
                     echo "Server started"
                     echo "Server URL: http://localhost:4000"
-                    input(message: "Click 'Proceed' to open the server URL in a new tab", ok: "Proceed")
+                    input(message: "Click 'Proceed' to stop the server", ok: "Proceed")
                 }
             }
         }
@@ -33,7 +33,7 @@ pipeline {
                 script {
                     bat 'taskkill /F /IM node.exe'
                     echo "Server stopped"
-                    sleep time: 5 * 60, unit: 'SECONDS' // Server runs for 5 minutes before stopping
+                    sleep time: 1 * 60, unit: 'SECONDS' // Server runs for 5 minutes before stopping
                 }
             }
         }
