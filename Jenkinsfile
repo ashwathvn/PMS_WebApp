@@ -18,34 +18,43 @@ pipeline {
        }
 
 
-   stage('Start server and Test') {
-    steps {
-        bat 'start /B cmd /C "node server/app.js"'
-        powershell '''
-        $ErrorActionPreference = 'Stop'
-        $timeout = 300
-        $url = "http://localhost:4000"
-        do {
-            Start-Sleep -Seconds 1
-            $connection = Test-NetConnection -ComputerName localhost -Port 4000
-            if ($connection.TcpTestSucceeded) {
-                Write-Host "Server is up and running."
-                break
-            } else {
-                Write-Host "Server is not yet ready. Waiting..."
+      stage('Start server') {
+            steps {
+                bat 'start /B cmd /C "node server/app.js"'
+                powershell '''
+                $ErrorActionPreference = 'Stop'
+                $timeout = 60
+                $url = "http://localhost:4000"
+                do {
+                    Start-Sleep -Seconds 1
+                    $connection = Test-NetConnection -ComputerName localhost -Port 4000
+                    if ($connection.TcpTestSucceeded) {
+                        Write-Host "Server is up and running."
+                        break
+                    } else {
+                        Write-Host "Server is not yet ready. Waiting..."
+                    }
+                    $timeout--
+                } while ($timeout -gt 0)
+    
+                if ($timeout -eq 0) {
+                    throw "Server startup timeout"
+                }
+                '''
+                echo "Server URL: http://localhost:4000"
             }
-            $timeout--
-        } while ($timeout -gt 0)
-
-        if ($timeout -eq 0) {
-            throw "Server startup timeout"
         }
-        '''
-        echo 'build complete'
-        input(message: "Click 'Proceed' to open the server URL in a new tab", ok: "Proceed")
-        echo 'Open the server URL in a new tab: http://localhost:4000'
+
+      
+
+        stage('Stop server') {
+            steps {
+                bat 'taskkill /F /IM node.exe'
+                echo "Server stopped."
+                sleep time: 5*60, unit: 'SECONDS'  // server runs for 5 minutes before stopping
+            }
+        }
     }
-}
 
 
 
