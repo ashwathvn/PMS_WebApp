@@ -15,7 +15,7 @@ pipeline {
                 echo "Build completed"
             }
         }
-        stages {
+       
         stage('Print Workspace') {
             steps {
                 script {
