@@ -15,6 +15,13 @@ pipeline {
                 echo "Build completed"
             }
         }
+        stage('List Files') {
+            steps {
+                dir("${workspace}") {
+                    sh "ls -la"
+                }
+            }
+        }
       
 
        stage('Start server') {
