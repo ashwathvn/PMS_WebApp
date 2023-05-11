@@ -22,7 +22,7 @@ pipeline {
                     echo "Workspace directory: ${workspace}"
                     // or
                     echo "Workspace directory: ${env.WORKSPACE}"
-                }
+                
             }
         }
     }
