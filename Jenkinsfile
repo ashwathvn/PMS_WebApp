@@ -15,6 +15,17 @@ pipeline {
                 echo "Build completed"
             }
         }
+        stages {
+        stage('Print Workspace') {
+            steps {
+                script {
+                    echo "Workspace directory: ${workspace}"
+                    // or
+                    echo "Workspace directory: ${env.WORKSPACE}"
+                }
+            }
+        }
+    }
 
        stage('Start server') {
             steps {
